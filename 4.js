@@ -11,12 +11,12 @@ function isPalindrome(str) {
 
 // strategy: 
 // 1) decrement one by one find all products of the number up to 99, e,g., (on second iteration down to 97) 97*97, 97*98, 98*98, 98*99, 99*99
-// 2) put these results in a temporary array and sort it
-// 3) check that array for palindromes from greatest to least 
+// 2) put these results in a temporary array
+// 3) check that array for palindromes, storing the greatest and returning it at the end 
 // Continue 1-3 until a palindrome is found.
 
-// Note #1: I know the sorted array is inefficient, but until I can discern the pattern in which I should decrement the two factors being multiplied, this is the safest way to go.
-// Note #2: I admit there is inefficient duplication at step B1 since certain combinations will have been tried already (e.g., 94 * 99 and 99 * 94). 
+// Note #1: I know the array is inefficient, but until I can discern the pattern in which I should decrement the two factors being multiplied, this is the safest way to go.
+// Note #2: I admit there is inefficient duplication at step 1 since certain combinations will have been tried already (e.g., 94 * 99 and 99 * 94). 
 
 function biggestNumberForDigitCount(digit_count) {
 	var nineStack = ''
@@ -26,33 +26,45 @@ function biggestNumberForDigitCount(digit_count) {
 	return parseInt(nineStack);
 }
 
-function findCandidatePalindromes(num_digits) {
+function findCandidatePalindromes(num_digits, searchDepth) {
 	var bigN = biggestNumberForDigitCount(num_digits);
-	for (var i = 0; i < 100; i++) {
+	for (var i = 0; i < searchDepth; i++) {
 		decrementBy = i;
-		var temp = [];
+		var arr = [];
 		for (var j = bigN - decrementBy; j <= bigN; j++) {
 			for (var k = bigN - decrementBy; k <= bigN; k++) {
-				temp.push([j*k, j.toString() + " * " + k.toString()]);
+				arr.push([j*k, j.toString() + " * " + k.toString()]);
 			}
 		}
-		temp.sort(function(x,y) { return y[0] - x[0]});
 	}
-	return temp;
+	return arr;
 }
 
-function findPalindromeFromList(twoDArray) {
+function findBiggestPalindromeFromList(twoDArray) {
+  var greatestSoFar = [0,'0*0'];
 	for (var i = 0; i < twoDArray.length; i++) {
 		if (isPalindrome(twoDArray[i][0].toString())) {
-			return twoDArray[i];
+      if (greatestSoFar[0] < twoDArray[i][0]) {
+        greatestSoFar = twoDArray[i];
+      }
 		}
 	}
+  return greatestSoFar;
 }
 
 
-var list = findCandidatePalindromes(3);
-console.log(findPalindromeFromList(list));
-// => [ 906609, '913 * 993' ]
+var list = findCandidatePalindromes(3, 100);
+// var list = findCandidatePalindromes(4, 100);
+// var list = findCandidatePalindromes(5, 400);
+console.log(findBiggestPalindromeFromList(list));
+
+// for 3 digits, search depth 100:
+// [ 906609, '913 * 993' ], [Finished in 0.1s]
+// for 4 digits, search depth 100:
+// [ 99000099, '9901 * 9999' ], [Finished in 0.1s]
+// for 5 digits, search depth 400:
+// [ 9966006699, '99681 * 99979' ], [Finished in 7.7s]
+
 
 ///// example of the data structure we look through /////
 // var list = findCandidatePalindromes(2);
