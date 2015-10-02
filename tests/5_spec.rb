@@ -9,22 +9,32 @@ end
 
 describe "factorize_candidate_divisors" do
 	it "should provide an array of the prime factors for the candidate divisors" do
-		expect(factorize_candidate_divisors(10)).to eq([[2], [3], [2, 2], [5], [2, 3], [7], [2, 2, 2], [3, 3], [2, 5]])
+
+		can_div = candidate_divisors(10)
+
+		expect(factorize_candidate_divisors(can_div)).to eq([[2], [3], [2, 2], [5], [2, 3], [7], [2, 2, 2], [3, 3], [2, 5]])
 	end
 end
 
 describe "tally_each_factoriation" do
 
-	# let (:example) { factorize_candidate_divisors(10) }
-
 	it "should tally up each factorization" do
-		expect(tally_each_factoriation(10)).to eq([{2=>1}, {3=>1}, {2=>2}, {5=>1}, {2=>1, 3=>1}, {7=>1}, {2=>3}, {3=>2}, {2=>1, 5=>1}])
+
+		can_div = candidate_divisors(10)
+		factorizations = factorize_candidate_divisors(can_div)
+
+		expect(tally_each_factoriation(factorizations)).to eq([{2=>1}, {3=>1}, {2=>2}, {5=>1}, {2=>1, 3=>1}, {7=>1}, {2=>3}, {3=>2}, {2=>1, 5=>1}])
 	end
 end
 
 describe "record_highest_tallies" do
 	it "should record the highest tallies" do
-		expect(record_highest_tallies(10)).to eq({2=>3, 3=>2, 5=>1, 7=>1})
+
+		can_div = candidate_divisors(10)
+		factorizations = factorize_candidate_divisors(can_div)
+		tallies = tally_each_factoriation(factorizations)
+		
+		expect(record_highest_tallies(tallies)).to eq({2=>3, 3=>2, 5=>1, 7=>1})
 	end
 end
 

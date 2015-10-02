@@ -3,13 +3,13 @@ require_relative '3'
 def candidate_divisors(num)
 	(2..num).to_a
 end
-def factorize_candidate_divisors(num)
-	can_div = candidate_divisors(num)
-	can_div.map {|n| prime_factors(n)}
+
+def factorize_candidate_divisors(candidate_divisors)
+	candidate_divisors.map {|n| prime_factors(n)}
 end
-def tally_each_factoriation(num)
-	factorizations = factorize_candidate_divisors(num)
-	tallies = factorizations.map do |factorn|
+
+def tally_each_factoriation(factorizations_arr)
+	tallies = factorizations_arr.map do |factorn|
 		tally = {}
 		factorn.each do |ele|
 			if tally.include?(ele) 
@@ -23,9 +23,7 @@ def tally_each_factoriation(num)
 	tallies
 end
 
-def record_highest_tallies(num)
-	tallies = tally_each_factoriation(num)
-
+def record_highest_tallies(tallies)
 	highest_tallies = {}
 	tallies.each do |tally|
 		tally.each_pair do |k, v|
@@ -50,7 +48,10 @@ def mulitply_with_values_as_exponents(hash)
 end
 
 def solve(num)
-	highest_tallies = record_highest_tallies(num)
+	can_div = candidate_divisors(num)
+	factorizations = factorize_candidate_divisors(can_div)
+	tallies = tally_each_factoriation(factorizations)
+	highest_tallies = record_highest_tallies(tallies)
 	mulitply_with_values_as_exponents(highest_tallies)
 end
 

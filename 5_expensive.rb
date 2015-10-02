@@ -10,4 +10,6 @@ def evenly_divisble_one_thru(max)
 	nil
 end
 
+# p evenly_divisble_one_thru(10)
+# p evenly_divisble_one_thru(18)
 # p evenly_divisble_one_thru(20)
